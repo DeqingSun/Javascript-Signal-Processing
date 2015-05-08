@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<div id="canvas-container" style="width: 512px; height: 256px;">
+    <canvas id="sineCanvas" style="width: 512px; height: 256px;" width="512" height="256"></canvas>
+</div>
+
+
+<script>
+
+var canvas = document.getElementById("sineCanvas");
+var context = canvas.getContext("2d");
+context.lineJoin = 'round';
+context.save();
+
+var value_input=0;
+var value_input_history=[];
+var i;
+for (i=0;i<256;i++){
+	//value_input_history[i]=0;
+	value_input_history[i]=128+127*Math.sin(i*2*Math.PI/(256));
+}
+
+function drawDataSet(dataSet,dataColor){
+	context.strokeStyle = dataColor;
+	context.beginPath();
+    context.moveTo(0, dataSet[0]);   
+    // Loop to draw segments
+    for (i = 0; i <= 255; i += 1) {
+        context.lineTo(i*2, dataSet[i]);
+    }	
+	context.stroke();
+}
+
+var myVar;
+
+function myFunction() {
+	myVar = setInterval(alertFunc, 50);
+}
+
+
+var debug_counter=0;
+function alertFunc() {
+	//console.log("Hello!");
+	var input_value=128+127*Math.sin(debug_counter);
+	debug_counter+=Math.PI/128.0;
+	value_input_history.shift();
+	value_input_history.push(input_value);
+	
+	context.clearRect(0, 0, 512, 256);
+	drawDataSet(value_input_history,'#f00')
+}
+
+myFunction();
+
+
+
+</script>
+
+
+</body>
+</html>
