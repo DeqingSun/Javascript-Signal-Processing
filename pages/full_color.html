@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Fullscreen color</title>
+</head>
+
+<body>
+
+<script>
+
+document.getElementsByTagName('body')[0].onclick = changeColor;
+
+var colorList = ["Red","Lime","Blue","Yellow","Aqua","Fuchsia"];
+var colorPtr = -1;
+
+function changeColor()
+{
+    colorPtr++;
+	if (colorPtr>=colorList.length) colorPtr-=colorList.length;
+	document.body.style.backgroundColor = colorList[colorPtr];
+}
+
+</script>
+Press to change color
+</body>
+</html>
