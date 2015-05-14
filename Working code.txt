@@ -36,6 +36,50 @@ for (i=0;i<8;i++){  //get average value from array
 value_output=sum/8;
 
 
+//basic peak detection
+if(typeof previous_data === 'undefined'){  //We need to initialize variable before we use them 
+   previous_data=[0,0];
+};
+if (value_input<previous_data[0] && previous_data[1]<previous_data[0]){  //the Y axis is pointing downward this this example
+  value_output=255;
+}else{
+  value_output=0;
+}
+previous_data[1]=previous_data[0];  //push new data and discard old ones.
+previous_data[0]=value_input;
+
+
+
+//better peak detection
+delta=3;
+if(typeof max_value === 'undefined'){  //We need to initialize variable before we use them 
+   max_value=0;
+};
+if(typeof min_value === 'undefined'){ 
+   min_value=255;
+};
+if(typeof looking_for_peak === 'undefined'){ 
+   looking_for_peak=looking_for_peak=true;
+};
+
+if (value_input>max_value) max_value=value_input;
+if (value_input<min_value) min_value=value_input;
+
+value_output=128;
+if (looking_for_peak==true) {
+  if (value_input<(max_value-delta)) {
+    value_output=255;
+    min_value=max_value;
+    looking_for_peak=false;
+  }
+} else {
+  if (value_input>(min_value+delta)) {
+    value_output=0;
+    max_value=min_value;
+    looking_for_peak=true;
+  }
+}
+
 
 
 
