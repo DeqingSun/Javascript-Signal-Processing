@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>camera test</title>
+<title>camera signal</title>
 <script src="build/tracking.js"></script>
 </head>
 
@@ -16,11 +16,15 @@
         <canvas id="camCanvas" width="342" height="256" style="position:absolute"></canvas>
     </div>
 </div>
-<button onClick="runCode()">Apply code</button>
+<div>
 <textarea id="inputCode" cols="80" rows="20">
 value_output=value_input;
 </textarea>
-
+</div>
+<div>
+<button onClick="runCode()">Apply code</button>
+<p id="eval_result"></p>
+</div>
 <script>
 
 var inputCode = document.getElementById( 'inputCode' );
@@ -55,8 +59,17 @@ function drawDataSet(dataSet,dataColor){
 }
 
 function runCode(){
-	console.log("run code!");
-	codeText = inputCode.value
+	console.log("run code!"); 
+	try {
+		eval(inputCode.value); 
+		document.getElementById("eval_result").innerHTML = "Code applied on "+Date();
+		codeText = inputCode.value;
+	} catch (e) {
+		if (e instanceof SyntaxError) {
+			console.log(e.message);
+			document.getElementById("eval_result").innerHTML = "Syntax Error. Code not applied";
+		}
+	}
 }
 
 
@@ -74,7 +87,16 @@ function alertFunc() {
 	value_input_history.shift();
 	value_input_history.push(input_value);
 	value_input=input_value;
-	eval(codeText);
+	
+	try {
+		eval(codeText); 
+	} catch (e) {
+		if (e instanceof SyntaxError) {
+			console.log(e.message);
+			document.getElementById("eval_result").innerHTML = "Syntax Error.";
+		}
+	}
+	
 	value_output_history.shift();
 	value_output_history.push(value_output);
 	wavContext.clearRect(0, 0, 512, 256);
