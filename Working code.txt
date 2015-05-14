@@ -1,0 +1,44 @@
+//Direct Comparison
+if (value_input>(128)){
+  value_output=255;
+}else{
+  value_output=0;
+}
+
+
+//Threshold
+if (value_output!=255){
+  if (value_input>(128+5)){
+    value_output=255;
+  }
+}else{
+  if (value_input<(128-5)){
+    value_output=0;
+  }
+}
+
+
+
+//average filtering
+if(typeof data_filter === 'undefined'){  //We need to initialize variable before we use them 
+   data_filter=[0,0,0,0,0,0,0,0];
+};
+if(typeof data_pointer === 'undefined'){
+   data_pointer=0;
+};
+data_filter[data_pointer]=value_input;  //store previous values into array
+data_pointer++;
+if (data_pointer==8) data_pointer=0;
+sum=0;
+for (i=0;i<8;i++){  //get average value from array
+  sum+=data_filter[i];
+}
+value_output=sum/8;
+
+
+
+
+
+
+
+

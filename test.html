@@ -65,9 +65,11 @@ function runCode(){
 		document.getElementById("eval_result").innerHTML = "Code applied on "+Date();
 		codeText = inputCode.value;
 	} catch (e) {
+		console.log(e.message);
 		if (e instanceof SyntaxError) {
-			console.log(e.message);
 			document.getElementById("eval_result").innerHTML = "Syntax Error. Code not applied";
+		}else{
+			document.getElementById("eval_result").innerHTML = e.message;
 		}
 	}
 }
