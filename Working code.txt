@@ -81,6 +81,24 @@ if (looking_for_peak==true) {
 }
 
 
+//envelop detection
+delta=3;
+stepPeriod=10;
+if(typeof stepCounter === 'undefined'){  //We need to initialize variable before we use them 
+   stepCounter=0;
+};
+
+if (value_input<value_output){
+  value_output=value_input;
+  stepCounter=0;
+}else{
+  stepCounter++;
+  if (stepCounter>=stepPeriod){
+    stepCounter=0;
+    value_output+=delta;
+    if (value_output>value_input) value_output=value_input;
+  }
+}
 
 
 
