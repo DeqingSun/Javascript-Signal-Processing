@@ -52,10 +52,10 @@ for (i=0;i<256;i++){
 function drawDataSet(dataSet,dataColor){
 	wavContext.strokeStyle = dataColor;
 	wavContext.beginPath();
-    wavContext.moveTo(0, dataSet[0]);   
+    wavContext.moveTo(0, 255-dataSet[0]);   
     // Loop to draw segments
     for (i = 0; i <= 255; i += 1) {
-        wavContext.lineTo(i*2, dataSet[i]);
+        wavContext.lineTo(i*2, 255-dataSet[i]);
     }	
 	wavContext.stroke();
 }
@@ -86,7 +86,7 @@ function myFunction() {
 var debug_counter=0;
 function alertFunc() {
 	//console.log("Hello!");
-	var input_value=cam_value_input;
+	var input_value=255-cam_value_input;
 	debug_counter+=Math.PI/128.0;
 	value_input_history.shift();
 	value_input_history.push(input_value);
@@ -109,8 +109,8 @@ function alertFunc() {
 	
 	wavContext.strokeStyle = '#8f8';
 	wavContext.beginPath();
-    wavContext.moveTo(0, value_threshold);   
-    wavContext.lineTo(255*2, value_threshold);
+    wavContext.moveTo(0, 255-value_threshold);   
+    wavContext.lineTo(255*2, 255-value_threshold);
 	wavContext.stroke();
 	
 }
