@@ -40,6 +40,9 @@ var value_input=0;
 var value_input_history=[];
 var value_output=0;
 var value_output_history=[];
+var value_output2=-100;
+var value_output2_history=[];
+
 
 var value_threshold=-100;
 
@@ -47,6 +50,7 @@ var i;
 for (i=0;i<256;i++){
 	value_input_history[i]=0;
 	value_output_history[i]=0;
+	value_output2_history[i]=0;
 }
 
 function drawDataSet(dataSet,dataColor){
@@ -103,9 +107,13 @@ function alertFunc() {
 	
 	value_output_history.shift();
 	value_output_history.push(value_output);
+	value_output2_history.shift();
+	value_output2_history.push(value_output2);
 	wavContext.clearRect(0, 0, 512, 256);
 	drawDataSet(value_input_history,'#f00')
 	drawDataSet(value_output_history,'#00f')
+	drawDataSet(value_output2_history,'#0ff')
+	
 	
 	wavContext.strokeStyle = '#8f8';
 	wavContext.beginPath();
