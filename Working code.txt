@@ -83,16 +83,19 @@ if (looking_for_peak==true) {
 }
 
 
-//envelop detection
+//envelop detection lower
 if (value_input<value_output){
  value_output=value_input;
- stepCounter=0;
 }else{
    value_output+=0.5;
-   if (value_output>value_input) value_output=value_input;
 }
 
-
+//envelop detection upper
+if (value_input>value_output2){
+ value_output2=value_input;
+}else{
+   value_output2-=0.5;
+}
 
 
 
