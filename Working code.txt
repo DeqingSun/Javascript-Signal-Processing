@@ -8,10 +8,12 @@ if (value_input>(128)){
 
 //Threshold
 if (value_output!=255){
+  value_threshold=128+5;
   if (value_input>(128+5)){
     value_output=255;
   }
 }else{
+  value_threshold=128-5;
   if (value_input<(128-5)){
     value_output=0;
   }
@@ -82,23 +84,15 @@ if (looking_for_peak==true) {
 
 
 //envelop detection
-delta=3;
-stepPeriod=10;
-if(typeof stepCounter === 'undefined'){  //We need to initialize variable before we use them 
-   stepCounter=0;
-};
-
 if (value_input<value_output){
-  value_output=value_input;
-  stepCounter=0;
+ value_output=value_input;
+ stepCounter=0;
 }else{
-  stepCounter++;
-  if (stepCounter>=stepPeriod){
-    stepCounter=0;
-    value_output+=delta;
-    if (value_output>value_input) value_output=value_input;
-  }
+   value_output+=0.5;
+   if (value_output>value_input) value_output=value_input;
 }
+
+
 
 
 
