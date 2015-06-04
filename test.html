@@ -1,30 +1,62 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>camera signal</title>
+<title>Basic Signal Processing Playground</title>
 <script src="build/tracking.js"></script>
+<style type="text/css">
+    body{
+	margin: 0; padding: 0;
+	background-color: #f2f2f2;
+    }
+    h1{
+	font-size: 48px; line-height: 1; font-weight: 200; margin: 20px; padding: 20px 0 20px 0;
+	color: #333;
+	font-family: "Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+	text-align: center;
+    }
+    p{
+	font-size: 18px; line-height: 1; font-weight: 200; margin: 20px;
+	color: #888;
+	font-family: "Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+	text-align: center;
+    }
+    a:link    {color:#888; background-color:transparent; text-decoration:underline}
+    a:visited {color:#888; background-color:transparent; text-decoration:underline}
+    a:hover   {color:#1992da; background-color:transparent; text-decoration:underline}
+    a:active  {color:#1992da; background-color:transparent; text-decoration:underline}
+    #container{
+	margin: 20px;
+    }
+</style>
 </head>
 
 <body>
-<div>
-    <div id="canvas-container" style="width: 512px; height: 256px; display:inline-block">
-    	<canvas id="sineCanvas" style="width: 512px; height: 256px;" width="512" height="256">	
-        </canvas>
+    <div id="container">
+	<div id="title" style="width: 870px; height: auto;">
+	    <h1>Basic Digital Signal Processing</h1>
+	    <p><a href="https://docs.google.com/presentation/d/1TApMrwrA7XBG5oQ5tKh7ZBJyj0iNbGzWPA_iuJhdl1s/edit?usp=sharing" target="_blank">Slides</a> | <a href="https://github.com/DeqingSun/Javascript-Signal-Processing/blob/master/Working%20code.txt" target="_blank">Sample Code</a> | Created by <a href="https://github.com/DeqingSun" target="_blank">Deqing Sun</a></p>
+	</div>
+	<div>
+	    <div id="canvas-container" style="width: 512px; height: 256px; background-color: #fff; border: solid 1px #aaa; display: inline-block; position: relative;">
+		<canvas id="sineCanvas" width="512" height="256" style="width: 512px; height: 256px; position: absolute; top: 0; left: 0;"></canvas>
+	    </div>
+	    
+	    <div id="canvas-container2" style="width: 342px; height: 256px; background-color: #000; border: solid 1px #aaa; display: inline-block; position: relative;">
+		<video id="camVideo" width="342" height="256" style="width: 342px; height: 256px; position: absolute; top: 0; left: 0;" preload autoplay loop muted controls></video>
+		<canvas id="camCanvas" width="342" height="256" style="width: 342px; height: 256px; position: absolute; top: 0; left: 0;"></canvas>
+	    </div>
+	</div>
+	<div style="width: 862px; height: auto; float: none; display: inline-block; margin: 20px 0 10px 0;">
+	    <textarea id="inputCode" cols="80" rows="18" style="width: 100%; height: auto; font-size: 14px; text-align: left;">
+		value_output=value_input;
+	    </textarea>
+	</div>
+	<div>
+	    <button onClick="runCode()" style="width: 200px; height: 50px; background-color: #1992da; border: solid 2px #0d6ab2; color: #fff; font-size: 18px;">Apply code</button>
+	    <p id="eval_result"></p>
+	</div>
+	
     </div>
-    <div id="canvas-container2" style="width: 342px; height: 256px; display:inline-block">
-    	<video id="camVideo" width="342" height="256" style="position:absolute" preload autoplay loop muted controls></video>
-        <canvas id="camCanvas" width="342" height="256" style="position:absolute"></canvas>
-    </div>
-</div>
-<div>
-<textarea id="inputCode" cols="80" rows="20">
-value_output=value_input;
-</textarea>
-</div>
-<div>
-<button onClick="runCode()">Apply code</button>
-<p id="eval_result"></p>
-</div>
 <script>
 
 var inputCode = document.getElementById( 'inputCode' );
@@ -40,20 +72,26 @@ var value_input=0;
 var value_input_history=[];
 var value_output=0;
 var value_output_history=[];
+var value_output2=-100;
+var value_output2_history=[];
+
+
+var value_threshold=-100;
 
 var i;
 for (i=0;i<256;i++){
 	value_input_history[i]=0;
 	value_output_history[i]=0;
+	value_output2_history[i]=0;
 }
 
 function drawDataSet(dataSet,dataColor){
 	wavContext.strokeStyle = dataColor;
 	wavContext.beginPath();
-    wavContext.moveTo(0, dataSet[0]);   
+    wavContext.moveTo(0, 255-dataSet[0]);   
     // Loop to draw segments
     for (i = 0; i <= 255; i += 1) {
-        wavContext.lineTo(i*2, dataSet[i]);
+        wavContext.lineTo(i*2, 255-dataSet[i]);
     }	
 	wavContext.stroke();
 }
@@ -84,7 +122,7 @@ function myFunction() {
 var debug_counter=0;
 function alertFunc() {
 	//console.log("Hello!");
-	var input_value=cam_value_input;
+	var input_value=255-cam_value_input;
 	debug_counter+=Math.PI/128.0;
 	value_input_history.shift();
 	value_input_history.push(input_value);
@@ -101,9 +139,20 @@ function alertFunc() {
 	
 	value_output_history.shift();
 	value_output_history.push(value_output);
+	value_output2_history.shift();
+	value_output2_history.push(value_output2);
 	wavContext.clearRect(0, 0, 512, 256);
 	drawDataSet(value_input_history,'#f00')
 	drawDataSet(value_output_history,'#00f')
+	drawDataSet(value_output2_history,'#0ff')
+	
+	
+	wavContext.strokeStyle = '#8f8';
+	wavContext.beginPath();
+    wavContext.moveTo(0, 255-value_threshold);   
+    wavContext.lineTo(255*2, 255-value_threshold);
+	wavContext.stroke();
+	
 }
 
 myFunction();
