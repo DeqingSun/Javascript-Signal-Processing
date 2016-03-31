@@ -7,16 +7,26 @@ if (value_input>(128)){
 
 
 //Threshold
-if (value_output!=255){
-  value_threshold=128+5;
-  if (value_input>(128+5)){
-    value_output=255;
-  }
-}else{
+if(typeof value_was_above_threshold === 'undefined'){  //We need to initialize variable before we use them 
+   value_was_above_threshold=false;
+};
+
+if (value_was_above_threshold){
   value_threshold=128-5;
-  if (value_input<(128-5)){
-    value_output=0;
-  }
+}else{
+  value_threshold=128+5;
+}
+
+if (value_input>value_threshold){
+  value_was_above_threshold=true;
+}else{
+  value_was_above_threshold=false;
+}
+
+if (value_was_above_threshold){
+  value_output=255;
+}else{
+  value_output=0;
 }
 
 
@@ -39,16 +49,20 @@ value_output=sum/8;
 
 
 //basic peak detection
-if(typeof previous_data === 'undefined'){  //We need to initialize variable before we use them 
-   previous_data=[0,0];
+if(typeof previous_frame_data === 'undefined'){  //We need to initialize variable before we use them 
+   previous_frame_data=0;
 };
-if (value_input<previous_data[0] && previous_data[1]<previous_data[0]){  //the Y axis is pointing downward this this example
+if(typeof two_frame_ago_data === 'undefined'){  //We need to initialize variable before we use them 
+   two_frame_ago_data=0;
+};
+
+if (value_input<previous_frame_data && two_frame_ago_data<previous_frame_data){  //the Y axis is pointing downward this this example
   value_output=255;
 }else{
   value_output=0;
 }
-previous_data[1]=previous_data[0];  //push new data and discard old ones.
-previous_data[0]=value_input;
+two_frame_ago_data=previous_frame_data;  //push new data and discard old ones.
+previous_frame_data=value_input;
 
 
 
