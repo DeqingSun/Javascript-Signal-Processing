@@ -69,7 +69,7 @@
                         document.getElementById('ledContainer').style.display = "block";
                         document.getElementById('connectButton').style.display = "none";
                         setInterval(function () {
-                            document.getElementById('notifyLabel').innerHTML = ('Will refresh in :' + timeoutTime + ' seconds');
+                            document.getElementById('notifyLabel').innerHTML = ('Will refresh & in :' + timeoutTime + ' seconds');
                             if (timeoutTime == 0) {
                                 location.reload();
                             } else {
