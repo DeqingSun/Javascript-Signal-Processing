@@ -67,9 +67,9 @@
       audio: opt_options.audio
     }, function(stream) {
         try {
-          element.src = window.URL.createObjectURL(stream);
+          element.srcObject = window.URL.createObjectURL(stream);
         } catch (err) {
-          element.src = stream;
+          element.srcObject = stream;
         }
       }, function() {
         throw Error('Cannot capture user camera.');
